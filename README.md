@@ -7,7 +7,10 @@ Currently, I am experimenting with the API and general flow of the methods. Expe
 ### **NOTE:**
 As this uses web parsing, it's very fragle. It's subject to the whims of Twitter and their web layout, and uses many older web pages (https://mobile.twitter.com) that don't have similar functionality on their newer PWA pages. It goes without saying, but **_DON'T USE THIS LIBRARY IN PRODUCTION!!!_**
 
+## Libraries
 
+- [anglesharp](https://anglesharp.github.io/)
+- [Json.NET](https://www.newtonsoft.com/json)
 
 ## Sample Code
 
