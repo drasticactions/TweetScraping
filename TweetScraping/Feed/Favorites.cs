@@ -39,7 +39,7 @@ namespace TweetScraping.Feed
             return _config;
         }
 
-        public async Task<List<Tweet>> Get()
+        public async Task<List<Tweet>> GetAsync()
         {
             if (string.IsNullOrEmpty(_config.Username))
                 throw new Exception("You must add Username to the Config parameter first!");

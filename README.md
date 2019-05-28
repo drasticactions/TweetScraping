@@ -30,7 +30,7 @@ using (var favorites = new Feed.Favorites(config))
     do
     {
         // Gets the "Favorites" feed for "GoOffKings"
-        var favoriteTweets = await favorites.Get();
+        var favoriteTweets = await favorites.GetAsync();
         foreach (var tweet in favoriteTweets)
         {
             System.Console.WriteLine($"{tweet.Username}: {tweet.Text}");

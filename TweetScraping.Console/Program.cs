@@ -17,7 +17,7 @@ namespace TweetScraping.Console
             //{
             //    do
             //    {
-            //        var favoriteTweets = await favorites.Get();
+            //        var favoriteTweets = await favorites.GetAsync();
             //        foreach (var tweet in favoriteTweets)
             //        {
             //            System.Console.WriteLine($"{tweet.Username}: {tweet.Text}");
