@@ -40,11 +40,11 @@ namespace TweetScraping.Feed
         public async Task<List<Tweet>> GetAsync()
         {
             var url = GenerateUrl();
-            var jsonString = await _client.GetJsonStringAsync(url.ToString());
+            var jsonString = await _client.GetStringAsync(url.ToString());
             var search = JsonConvert.DeserializeObject<Models.Search>(jsonString);
             _config.HasMoreItems = search.HasMoreItems;
             _config.MaxPosition = search.MinPosition;
-            var html = await _client.ParseHtml(search.ItemsHtml);
+            var html = await _client.ParseHtmlAsync(search.ItemsHtml);
             var tweetsDiv = html.QuerySelectorAll("div.tweet");
             var tweets = new List<Tweet>();
             foreach (var tweetDiv in tweetsDiv)

@@ -42,22 +42,31 @@ namespace TweetScraping.Tools
             _client.DefaultRequestHeaders.Add("User-Agent", url.Contains("mobile.twitter.com") ? _mobileUserAgent : _userAgent);
         }
 
-        public async Task<string> GetJsonStringAsync(string url)
+        private void SetupAuth (string token)
+        {
+            _client.DefaultRequestHeaders.Remove("Authorization");
+            if (!string.IsNullOrEmpty(token))
+                _client.DefaultRequestHeaders.Add("Authorization", token);
+        }
+
+        public async Task<string> GetStringAsync(string url, string token = "")
         {
             SetupHeaders(url);
+            SetupAuth(token);
             var response = await _client.GetAsync(url);
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<IHtmlDocument> GetHtmlAsync(string url)
+        public async Task<IHtmlDocument> GetHtmlAsync(string url, string token = "")
         {
             SetupHeaders(url);
+            SetupAuth(token);
             var response = await _client.GetAsync(url);
             var test = await response.Content.ReadAsStringAsync();
-            return await ParseHtml(test);
+            return await ParseHtmlAsync(test);
         }
 
-        public async Task<IHtmlDocument> ParseHtml(string html)
+        public async Task<IHtmlDocument> ParseHtmlAsync(string html)
         {
             return await _parser.ParseDocumentAsync(html);
         }

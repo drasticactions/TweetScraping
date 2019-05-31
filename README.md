@@ -60,8 +60,8 @@ using (var favorites = new Feed.Favorites(config))
 - [x] Basic Search Feed
 - [x] Favorites Feed
 - [x] User Profile
+- [x] Parse Video Embed
 - [ ] Followers Feed
 - [ ] Following Feed
-- [ ] Parse Video Embed
 - [ ] Complete Search Functions
 - [ ] CLI Program
