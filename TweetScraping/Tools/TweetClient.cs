@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TweetScraping.Tools
 {
@@ -42,17 +43,43 @@ namespace TweetScraping.Tools
             _client.DefaultRequestHeaders.Add("User-Agent", url.Contains("mobile.twitter.com") ? _mobileUserAgent : _userAgent);
         }
 
-        private void SetupAuth (string token)
+        private async Task SetupAuth (string token)
         {
             _client.DefaultRequestHeaders.Remove("Authorization");
             if (!string.IsNullOrEmpty(token))
                 _client.DefaultRequestHeaders.Add("Authorization", token);
+            if (!_client.DefaultRequestHeaders.Contains("x-guest-token") 
+                && _client.DefaultRequestHeaders.Contains("Authorization"))
+            {
+                var guestAuth = await GetGuestAuthToken();
+                _client.DefaultRequestHeaders.Add("x-guest-token", guestAuth);
+            }
+        }
+
+        public async Task<string> GetGuestAuthToken ()
+        {
+            var response = await _client.PostAsync("https://api.twitter.com/1.1/guest/activate.json", new StringContent(""));
+            var guestTokenJson = await response.Content.ReadAsStringAsync();
+            var guestAuth = JToken.Parse(guestTokenJson);
+            if (guestAuth["errors"] != null)
+            {
+                throw new Exception($"Could not get guest auth token, {guestAuth["errors"]}");
+            }
+            return (string)guestAuth["guest_token"];
+        }
+
+        public async Task<string> PostStringAsync(string url, string content = "", string token = "")
+        {
+            SetupHeaders(url);
+            await SetupAuth(token);
+            var response = await _client.PostAsync(url, new StringContent(content));
+            return await response.Content.ReadAsStringAsync();
         }
 
         public async Task<string> GetStringAsync(string url, string token = "")
         {
             SetupHeaders(url);
-            SetupAuth(token);
+            await SetupAuth(token);
             var response = await _client.GetAsync(url);
             return await response.Content.ReadAsStringAsync();
         }
@@ -60,7 +87,7 @@ namespace TweetScraping.Tools
         public async Task<IHtmlDocument> GetHtmlAsync(string url, string token = "")
         {
             SetupHeaders(url);
-            SetupAuth(token);
+            await SetupAuth(token);
             var response = await _client.GetAsync(url);
             var test = await response.Content.ReadAsStringAsync();
             return await ParseHtmlAsync(test);

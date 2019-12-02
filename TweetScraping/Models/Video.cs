@@ -46,6 +46,10 @@ namespace TweetScraping.Models
                 var token = match.Value;
                 var playerConfigString = await client.GetStringAsync($"https://api.twitter.com/1.1/videos/tweet/config/{id}.json", token);
                 var playerConfig = JToken.Parse(playerConfigString);
+                if (playerConfig["errors"] != null)
+                {
+                    throw new Exception($"Could not get playback item for {id}");
+                }
                 var playbackUrl = (string)playerConfig["track"]["playbackUrl"];
                 var playbackUri = new Uri(playbackUrl);
                 var m3u3Text = await client.GetStringAsync(playbackUrl, token);
