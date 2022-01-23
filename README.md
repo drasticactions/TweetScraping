@@ -58,7 +58,6 @@ using (var favorites = new Feed.Favorites(config))
 ## TODO
 
 - [x] Basic Search Feed
-- [x] Favorites Feed
 - [x] User Profile
 - [x] Parse Video Embed
 - [ ] Followers Feed
