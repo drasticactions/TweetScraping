@@ -10,7 +10,7 @@ As this uses web parsing, it's very fragle. It's subject to the whims of Twitter
 ## Libraries
 
 - [anglesharp](https://anglesharp.github.io/)
-- [Json.NET](https://www.newtonsoft.com/json)
+- System.Text.Json
 
 ## Sample Code
 

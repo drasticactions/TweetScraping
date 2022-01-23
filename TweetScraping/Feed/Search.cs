@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
-using System.Web;
-using Newtonsoft.Json;
 using TweetScraping.Models;
 using TweetScraping.Tools;
 
@@ -14,19 +12,19 @@ namespace TweetScraping.Feed
         private Config _config;
         private TweetClient _client;
 
-        public Search (Config config)
+        public Search(Config config)
         {
             _config = config;
             _client = new TweetClient();
         }
 
-        public Search (TweetClient client, Config config)
+        public Search(TweetClient client, Config config)
         {
             _config = config;
             _client = client;
         }
 
-        public Search ()
+        public Search()
         {
             _config = new Config();
             _client = new TweetClient();
@@ -41,7 +39,7 @@ namespace TweetScraping.Feed
         {
             var url = GenerateUrl();
             var jsonString = await _client.GetStringAsync(url.ToString());
-            var search = JsonConvert.DeserializeObject<Models.Search>(jsonString);
+            var search = System.Text.Json.JsonSerializer.Deserialize<Models.Search>(jsonString);
             _config.HasMoreItems = search.HasMoreItems;
             _config.MaxPosition = search.MinPosition;
             var html = await _client.ParseHtmlAsync(search.ItemsHtml);
@@ -52,7 +50,7 @@ namespace TweetScraping.Feed
             return tweets;
         }
 
-        private Uri GenerateUrl ()
+        private Uri GenerateUrl()
         {
             var twitterBase = "https://twitter.com/i/search/timeline";
             var query = new List<string>();

@@ -1,9 +1,4 @@
-﻿using System;
-using TweetScraping.Tools;
-using TweetScraping.Models;
-using System.Threading.Tasks;
-using TweetScraping.Feed;
-using System.Linq;
+﻿using System.Threading.Tasks;
 
 namespace TweetScraping.Console
 {
@@ -11,8 +6,8 @@ namespace TweetScraping.Console
     {
         static async Task Main(string[] args)
         {
-            //var results = await Models.Video.GetVideoPlaylist("1132741434409283584");
-            //var segments = await Video.GetVideoSegments(results.Last());
+            //var results = await Feed.Video.GetVideoPlaylist("1268658364944441346");
+            //var segments = await Feed.Video.GetVideoSegments(results.Last());
             // TODO: Currently used to play around with Library. Eventually will be turned into CLI program.
             //var user = await User.GetAsync("drasticactionSA");
             //var config = new Config { Username = "GoOffKings" };

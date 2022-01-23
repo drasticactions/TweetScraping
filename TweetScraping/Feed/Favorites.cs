@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using Newtonsoft.Json;
 using TweetScraping.Models;
 using TweetScraping.Tools;
 

@@ -1,11 +1,10 @@
-﻿using System;
+﻿using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using AngleSharp.Html.Dom;
-using AngleSharp.Html.Parser;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using TweetScraping.Models;
 
 namespace TweetScraping.Tools
 {
@@ -37,18 +36,18 @@ namespace TweetScraping.Tools
 
         #endregion
 
-        private void SetupHeaders (string url)
+        private void SetupHeaders(string url)
         {
             _client.DefaultRequestHeaders.Remove("User-Agent");
             _client.DefaultRequestHeaders.Add("User-Agent", url.Contains("mobile.twitter.com") ? _mobileUserAgent : _userAgent);
         }
 
-        private async Task SetupAuth (string token)
+        private async Task SetupAuth(string token)
         {
             _client.DefaultRequestHeaders.Remove("Authorization");
             if (!string.IsNullOrEmpty(token))
                 _client.DefaultRequestHeaders.Add("Authorization", token);
-            if (!_client.DefaultRequestHeaders.Contains("x-guest-token") 
+            if (!_client.DefaultRequestHeaders.Contains("x-guest-token")
                 && _client.DefaultRequestHeaders.Contains("Authorization"))
             {
                 var guestAuth = await GetGuestAuthToken();
@@ -56,16 +55,16 @@ namespace TweetScraping.Tools
             }
         }
 
-        public async Task<string> GetGuestAuthToken ()
+        public async Task<string> GetGuestAuthToken()
         {
             var response = await _client.PostAsync("https://api.twitter.com/1.1/guest/activate.json", new StringContent(""));
             var guestTokenJson = await response.Content.ReadAsStringAsync();
-            var guestAuth = JToken.Parse(guestTokenJson);
-            if (guestAuth["errors"] != null)
+            var guestAuth = System.Text.Json.JsonSerializer.Deserialize<GuestTokenAuth>(guestTokenJson);
+            if (guestAuth.GuestToken is null)
             {
-                throw new Exception($"Could not get guest auth token, {guestAuth["errors"]}");
+                throw new Exception($"Could not get guest auth token");
             }
-            return (string)guestAuth["guest_token"];
+            return guestAuth.GuestToken;
         }
 
         public async Task<string> PostStringAsync(string url, string content = "", string token = "")
